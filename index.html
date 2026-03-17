@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaPay KPI Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;min-height:100vh;}
+.header{background:linear-gradient(135deg,#0f3460,#16213e);padding:20px 30px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.08);}
+.header h1{font-size:20px;font-weight:700;}
+.header p{font-size:12px;opacity:0.5;margin-top:2px;}
+.live{background:#10b981;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px;}
+.dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.nav{display:flex;gap:8px;padding:14px 30px;background:#0f1117;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
+.nb{padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:rgba(255,255,255,0.06);color:#94a3b8;transition:background 0.2s;}
+.nb.active{background:#0f3460;color:#fff;}
+.wrap{padding:24px 30px;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin-bottom:22px;}
+.kc{background:#1a1f2e;border-radius:10px;padding:18px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kc.g::before{background:#10b981;}.kc.b::before{background:#3b82f6;}.kc.p::before{background:#8b5cf6;}.kc.y::before{background:#f59e0b;}.kc.r::before{background:#ef4444;}
+.kl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.kv{font-size:22px;font-weight:800;margin-bottom:4px;}
+.kc.g .kv{color:#10b981;}.kc.b .kv{color:#3b82f6;}.kc.p .kv{color:#8b5cf6;}.kc.y .kv{color:#f59e0b;}.kc.r .kv{color:#ef4444;}
+.kt{font-size:11px;}.up{color:#10b981;}.dn{color:#ef4444;}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px;}
+.cc{background:#1a1f2e;border-radius:10px;padding:22px;border:1px solid rgba(255,255,255,0.06);}
+.cc.full{grid-column:1/-1;}
+.ct{font-size:13px;font-weight:700;margin-bottom:4px;}
+.cs{font-size:11px;color:#64748b;margin-bottom:16px;}
+.cw{position:relative;height:200px;}
+.tc{background:#1a1f2e;border-radius:10px;padding:22px;border:1px solid rgba(255,255,255,0.06);margin-bottom:22px;}
+.tt{font-size:13px;font-weight:700;margin-bottom:16px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.04);}
+tr:last-child td{border-bottom:none;}
+.s{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.s.ok{background:rgba(16,185,129,0.15);color:#10b981;}
+.s.w{background:rgba(245,158,11,0.15);color:#f59e0b;}
+.s.f{background:rgba(239,68,68,0.15);color:#ef4444;}
+.footer{text-align:center;font-size:11px;color:#334155;padding:16px 0 4px;}
+.footer strong{color:#3b82f6;}
+@media(max-width:580px){.cg{grid-template-columns:1fr;}.cc.full{grid-column:1;}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div><h1>NovaPay · KPI Dashboard</h1><p>Global B2B Payments Fintech · FY2025 · Sample by Aryan Kasture</p></div>
+  <div class="live"><div class="dot"></div>LIVE DEMO</div>
+</div>
+<div class="nav">
+  <button class="nb active" onclick="show('overview',this)">Overview</button>
+  <button class="nb" onclick="show('growth',this)">Growth</button>
+  <button class="nb" onclick="show('unit',this)">Unit Economics</button>
+  <button class="nb" onclick="show('risk',this)">Risk</button>
+</div>
+<div class="wrap">
+
+  <div id="overview">
+    <div class="kpis">
+      <div class="kc g"><div class="kl">Monthly Revenue</div><div class="kv">$1.53M</div><div class="kt up">↑ 11% MoM</div></div>
+      <div class="kc b"><div class="kl">Active Clients</div><div class="kv">3,840</div><div class="kt up">↑ 9% MoM</div></div>
+      <div class="kc p"><div class="kl">ARR</div><div class="kv">$18.4M</div><div class="kt up">↑ 42% YoY</div></div>
+      <div class="kc y"><div class="kl">CAC</div><div class="kv">$1,240</div><div class="kt dn">↑ 8% — Monitor</div></div>
+      <div class="kc g"><div class="kl">LTV : CAC</div><div class="kv">2.9x</div><div class="kt dn">Below 3x — Flag</div></div>
+      <div class="kc r"><div class="kl">Net Burn</div><div class="kv">$2.1M</div><div class="kt dn">↑ from $1.6M</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc"><div class="ct">Revenue vs Target</div><div class="cs">Monthly actuals vs board targets ($M)</div><div class="cw"><canvas id="c1"></canvas></div></div>
+      <div class="cc"><div class="ct">Client Growth</div><div class="cs">Active enterprise clients — last 8 months</div><div class="cw"><canvas id="c2"></canvas></div></div>
+      <div class="cc full"><div class="ct">Revenue by Stream</div><div class="cs">Transaction fees vs subscriptions vs FX spread ($M)</div><div class="cw"><canvas id="c3"></canvas></div></div>
+    </div>
+    <div class="tc">
+      <div class="tt">KPI Health Summary</div>
+      <table>
+        <tr><th>Metric</th><th>Current</th><th>Target</th><th>Variance</th><th>Status</th></tr>
+        <tr><td>Gross Margin</td><td>61%</td><td>65%</td><td>-4pp</td><td><span class="s w">Watch</span></td></tr>
+        <tr><td>Net Revenue Retention</td><td>118%</td><td>120%</td><td>-2pp</td><td><span class="s ok">On Track</span></td></tr>
+        <tr><td>Burn Multiple</td><td>1.4x</td><td>&lt;1.0x</td><td>+0.4x</td><td><span class="s w">Watch</span></td></tr>
+        <tr><td>Customer Churn</td><td>2.8%</td><td>&lt;2.5%</td><td>+0.3pp</td><td><span class="s w">Watch</span></td></tr>
+        <tr><td>Transaction Success Rate</td><td>99.2%</td><td>99.5%</td><td>-0.3pp</td><td><span class="s w">Watch</span></td></tr>
+        <tr><td>LTV : CAC Ratio</td><td>2.9x</td><td>3.0x+</td><td>-0.1x</td><td><span class="s f">Flag</span></td></tr>
+        <tr><td>Cash Runway</td><td>19 mo</td><td>24 mo</td><td>-5 mo</td><td><span class="s f">Flag</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="growth" style="display:none">
+    <div class="kpis">
+      <div class="kc g"><div class="kl">Revenue Growth</div><div class="kv">42%</div><div class="kt up">YoY · FY24</div></div>
+      <div class="kc b"><div class="kl">New Clients/Mo</div><div class="kv">320</div><div class="kt up">↑ 9% MoM</div></div>
+      <div class="kc p"><div class="kl">ARPU</div><div class="kv">$398</div><div class="kt up">↑ 4% MoM</div></div>
+      <div class="kc y"><div class="kl">Payback Period</div><div class="kv">8.4 mo</div><div class="kt up">Target &lt;9mo ✓</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc full"><div class="ct">Cumulative ARR Growth</div><div class="cs">Year-to-date ARR trajectory ($M)</div><div class="cw" style="height:240px"><canvas id="c4"></canvas></div></div>
+    </div>
+  </div>
+
+  <div id="unit" style="display:none">
+    <div class="kpis">
+      <div class="kc g"><div class="kl">LTV</div><div class="kv">$3,596</div><div class="kt up">Strong retention</div></div>
+      <div class="kc y"><div class="kl">CAC</div><div class="kv">$1,240</div><div class="kt dn">Rising — control</div></div>
+      <div class="kc b"><div class="kl">LTV:CAC</div><div class="kv">2.9x</div><div class="kt dn">Below 3x benchmark</div></div>
+      <div class="kc p"><div class="kl">Gross Margin</div><div class="kv">61%</div><div class="kt dn">Target 65%</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc"><div class="ct">CAC Trend</div><div class="cs">Monthly CAC vs LTV÷3 benchmark ($)</div><div class="cw"><canvas id="c5"></canvas></div></div>
+      <div class="cc"><div class="ct">Margin Trend</div><div class="cs">Gross vs Net margin (%)</div><div class="cw"><canvas id="c6"></canvas></div></div>
+    </div>
+  </div>
+
+  <div id="risk" style="display:none">
+    <div class="kpis">
+      <div class="kc y"><div class="kl">Churn Rate</div><div class="kv">2.8%</div><div class="kt dn">Rising — monitor</div></div>
+      <div class="kc g"><div class="kl">Net Rev Retention</div><div class="kv">118%</div><div class="kt up">Expansion offsetting</div></div>
+      <div class="kc r"><div class="kl">Burn Multiple</div><div class="kv">1.4x</div><div class="kt dn">Target below 1.0x</div></div>
+      <div class="kc b"><div class="kl">Cash Runway</div><div class="kv">19 mo</div><div class="kt dn">Target 24mo+</div></div>
+    </div>
+    <div class="cg">
+      <div class="cc full"><div class="ct">Churn & Burn Multiple — 8 Month Trend</div><div class="cs">Early warning indicators — two consecutive months rising = escalate immediately</div><div class="cw" style="height:240px"><canvas id="c7"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="footer">Built by <strong>Aryan Kasture</strong> · Financial Data & Python Automation · Sample Portfolio Piece</div>
+</div>
+
+<script>
+const M = ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+
+const AX = {
+  x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
+  y:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}}
+};
+
+const LEG = {labels:{color:'#94a3b8',font:{size:11},boxWidth:12}};
+
+function lineChart(id, datasets) {
+  new Chart(document.getElementById(id), {
+    type:'line',
+    data:{labels:M, datasets},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:LEG}, scales:AX}
+  });
+}
+
+function barChart(id, datasets, stacked) {
+  new Chart(document.getElementById(id), {
+    type:'bar',
+    data:{labels:M, datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false, plugins:{legend:LEG},
+      scales:{
+        x:{stacked:!!stacked, ticks:{color:'#64748b',font:{size:10}}, grid:{color:'rgba(255,255,255,0.04)'}},
+        y:{stacked:!!stacked, ticks:{color:'#64748b',font:{size:10}}, grid:{color:'rgba(255,255,255,0.06)'}}
+      }
+    }
+  });
+}
+
+function ld(label, data, color, fill) {
+  return {label, data, borderColor:color, backgroundColor: fill ? color.replace('rgb(','rgba(').replace(')',',0.12)') : 'transparent', tension:0.4, fill:!!fill, pointRadius:4, pointBackgroundColor:color, borderWidth:2};
+}
+
+function bd(label, data, color) {
+  return {label, data, backgroundColor:color, borderRadius:4, borderWidth:0};
+}
+
+lineChart('c1',[
+  ld('Actual ($M)',[0.88,0.96,1.04,1.13,1.22,1.32,1.42,1.53],'rgb(16,185,129)'),
+  {...ld('Target ($M)',[0.95,1.02,1.10,1.18,1.26,1.35,1.44,1.53],'rgb(100,116,139)'), borderDash:[5,4]}
+]);
+
+barChart('c2',[bd('Active Clients',[2180,2340,2530,2720,2960,3200,3490,3840],'rgba(59,130,246,0.75)')]);
+
+barChart('c3',[
+  bd('Transaction Fees ($M)',[0.60,0.66,0.71,0.77,0.83,0.90,0.97,1.05],'rgba(139,92,246,0.85)'),
+  bd('Subscriptions ($M)',   [0.18,0.20,0.22,0.24,0.26,0.28,0.30,0.32],'rgba(59,130,246,0.85)'),
+  bd('FX Spread ($M)',       [0.10,0.10,0.11,0.12,0.13,0.14,0.15,0.16],'rgba(16,185,129,0.85)')
+], true);
+
+lineChart('c4',[ld('Cumulative ARR ($M)',[5.8,6.7,7.8,9.0,10.5,12.1,13.8,15.7],'rgb(16,185,129)',true)]);
+
+lineChart('c5',[
+  ld('CAC ($)',[1050,1080,1110,1140,1170,1200,1220,1240],'rgb(245,158,11)'),
+  ld('LTV÷3 ($)',[1093,1100,1117,1133,1150,1163,1177,1199],'rgb(239,68,68)')
+]);
+
+lineChart('c6',[
+  ld('Gross Margin %',[63,63,62,62,61,61,61,61],'rgb(59,130,246)'),
+  ld('Net Margin %',[-18,-16,-14,-13,-12,-11,-10,-9],'rgb(139,92,246)')
+]);
+
+lineChart('c7',[
+  ld('Churn Rate %',[2.2,2.3,2.3,2.4,2.5,2.6,2.7,2.8],'rgb(245,158,11)'),
+  ld('Burn Multiple',[1.8,1.7,1.6,1.6,1.5,1.5,1.4,1.4],'rgb(239,68,68)')
+]);
+
+function show(tab, btn) {
+  ['overview','growth','unit','risk'].forEach(t => document.getElementById(t).style.display = 'none');
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).style.display = 'block';
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
